@@ -1,4 +1,5 @@
 from conf import all_subjects
+from colorama import Fore, Style
 
 
 class StudentManager:
@@ -22,11 +23,11 @@ class StudentManager:
     def get_student_info(self, student_name):
         student = self.get_student(student_name)
         if student is None:
-            print("Студента з таким ім'ям не знайдено.")
+            print(Fore.RED + "Студента з таким ім'ям не знайдено." + Style.RESET_ALL)
             return
-        print(f"Ім'я: {student.name}")
-        print(f"Оцінки:\n{student.get_grade()}")
-        print(f"Середній бал: {student.get_average():.2f}")
+        print(Fore.CYAN + f"Ім'я: {student.name}" + Style.RESET_ALL)
+        print(Fore.YELLOW + f"Оцінки:\n{student.get_grade()}" + Style.RESET_ALL)
+        print(Fore.GREEN + f"Середній бал: {student.get_average():.2f}" + Style.RESET_ALL)
 
 
 class Student:
@@ -37,7 +38,7 @@ class Student:
     def get_grade(self):
         grade_list = []
         for subject, grade in self.grades.items():
-            grade_list.append(f"{subject}: {grade if grade is not None else 'Немає оцінки'}")
+            grade_list.append(f"{subject}: {Fore.GREEN if grade is not None else Fore.RED}{grade if grade is not None else 'Немає оцінки'}{Style.RESET_ALL}")
         return "\n".join(grade_list)
 
     def add_grade(self):
@@ -51,12 +52,13 @@ class Student:
                 if 1 <= grade <= 12:
                     self.grades[subject] = grade
                 else:
-                    print("Оцінка повинна бути в діапазоні від 1 до 12.")
+                    print(Fore.RED + "Оцінка повинна бути в діапазоні від 1 до 12." + Style.RESET_ALL)
             else:
-                print("Невірний індекс предмета.")
+                print(Fore.RED + "Невірний індекс предмета." + Style.RESET_ALL)
         except ValueError:
-            print("Будь ласка, введіть коректне число.")
+            print(Fore.RED + "Будь ласка, введіть коректне число." + Style.RESET_ALL)
 
     def get_average(self):
         valid_grades = [grade for grade in self.grades.values() if grade is not None]
         return sum(valid_grades) / len(valid_grades) if valid_grades else 0
+
